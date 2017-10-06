@@ -6,21 +6,23 @@ Created on Tue Sep 26 15:20:21 2017
 """
 
 from sklearn.model_selection import cross_val_score
-from sklearn import neighbors
-from gensim.models import word2vec
-import logging
+#from sklearn import neighbors
+#from gensim.models import word2vec
+#import logging
+from sklearn.pipeline import Pipeline
 import sys
 import numpy as np
 from sklearn.preprocessing import scale, normalize
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
-from sklearn.neighbors import KDTree
+#from sklearn.neighbors import KDTree
 import time
 from sklearn import cross_validation
 from scipy.sparse import csr_matrix
 from sklearn import svm
 from sklearn.decomposition import TruncatedSVD
-from sklearn.ensemble import BaggingClassifier
+from sklearn.ensemble import BaggingClassifier, AdaBoostClassifier, RandomForestClassifier
+from sklearn.feature_selection import SelectFromModel
 
 #load data
 with open(r'C:\Users\Administrator\Desktop\cs484_hw2\1505760800_9146957_train_drugs.data', 'r') as f:
@@ -53,27 +55,44 @@ for i in test_feature:
 X_test = csr_matrix((data, indices, indptr), shape=(350, 100000))
 
 sys.exit(0)
-# Classification with Bagging!
-clf = svm.SVC(class_weight={1: 9.37})
 
-bagging = BaggingClassifier(clf, n_estimators=20, max_samples=1.0, max_features=1.0)
+# Classification with Bagging! and Boosting!
+print('Okay we get here!')
+w = 10
+#clf = svm.SVC(class_weight='balanced', gamma=1/2000, cache_size=1000)
+lsvc = svm.LinearSVC(C=1, penalty="l1", class_weight='balanced', dual=False).fit(X_train, label)
+model = SelectFromModel(lsvc, prefit=True)
+
+clf = Pipeline([
+  ('feature_selection', model),
+  ('classification', svm.Linear(C=0.2105, class_weight='balanced', gamma=1/5000, cache_size=1000))
+])
+    
+s = time.clock()
+bagging = BaggingClassifier(clf, max_samples=1.0, max_features=1.0)
+
+#bdt = AdaBoostClassifier(clf, algorithm="SAMME", n_estimators=50)
+
 #clf.fit(X_train, label)  
 #pre = clf.predict(X_test)
 bagging.fit(X_train, label)
 
-pre = bagging.predict(X_test)
-    
+#bdt.fit(X_train, label)
 
+pre = bagging.predict(X_test)
+#pre = bdt.fit(X_test)
+e = time.clock()
 # Cross Validation
 #scores = cross_val_score(clf, X_train, label, cv=3, scoring='f1')
+print('# of positive is :', pre[pre==1].shape[0])
+print('weight is : ', w)
+print('We finished! time is :', e - s)
 
-    
 # write it to csv file
 with open(r'C:\Users\Administrator\Desktop\cs484_hw2\predicted_class.csv', 'w') as f:
     for i in pre:
         f.write(str(i) + '\n')
     
-
 
 
 
