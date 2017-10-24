@@ -30,6 +30,9 @@ from sklearn.neighbors import kneighbors_graph
 import Kmeans     # Kmeans class I write
 
 
+import matplotlib.pyplot as plt
+
+
 # preprocessing input to get sparse matrix
 with open(r'C:\Users\Administrator\Desktop\cs484_hw2\HW3\input.data', 'r') as f:
     X_raw = f.readlines()
@@ -77,23 +80,27 @@ sys.exit(0)
 
 
 # Do KMeans clustering
-kmeans = KMeans(n_clusters=7, random_state=0).fit(X_lsa)
+#kmeans = KMeans(n_clusters=7, random_state=0).fit(X_lsa)
 
-kmeans_2 = KMeans(n_clusters=7).fit(tfidf)
+#kmeans_2 = KMeans(n_clusters=7).fit(tfidf)
 
-kmeans_mine = Kmeans.KMeans(n_clusters=7).fit(X_lsa)
+kmeans_mine = Kmeans.KMeans(n_clusters=7, n_init=15, init='k-means++').fit(X_lsa)
 
-km = MiniBatchKMeans(n_clusters=7, init='k-means++', n_init=1,
-                         init_size=1000, batch_size=1000)
+#km = MiniBatchKMeans(n_clusters=7, init='k-means++', n_init=1, init_size=1000, batch_size=1000)
 
-db = DBSCAN(eps=1.3, min_samples=100).fit(X)
+#db = DBSCAN(eps=1.3, min_samples=100).fit(X)
 
-knn_graph = kneighbors_graph(X, 180, include_self=False)
+#knn_graph = kneighbors_graph(X_lsa, 100, include_self=False)
 
-clustering = AgglomerativeClustering(linkage='ward', n_clusters=7, memory=r'E:\cache')
-clustering.fit(X_lsa)
+#clustering = AgglomerativeClustering(linkage='ward', n_clusters=7, memory=r'E:\cache')
+#clustering.fit(X_lsa)
 with open(r'C:\Users\Administrator\Desktop\cs484_hw2\HW3\text_clu.txt', 'w') as f:
-    for i in clustering.labels_:
-        f.write(str(i) + '\n')    
+    for i in kmeans_mine:
+        f.write(str(int(i)) + '\n')    
+        
+# Plot
+
+
+
 
 
