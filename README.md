@@ -15,7 +15,7 @@ molecule. 800 samples in total. I use SVM for this one.
 
 News_clustering:
 
-This project aims to cluster news to different topics. I use hierarchical
+This project aims to cluster news to different topics. I preprocess the data to a tf-idf matrix. Then use hierarchical
 clustering with ward measurement metric.
 
 Rating_movies:
