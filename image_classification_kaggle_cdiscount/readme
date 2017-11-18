@@ -1,7 +1,6 @@
 Adapted from https://www.kaggle.com/ezietsman/inception-v3-finetune
 
-This is for a kaggle competition : https://www.kaggle.com/c/cdiscount-image-
-classification-challenge
+This is for a kaggle competition : https://www.kaggle.com/c/cdiscount-image-classification-challenge
 
 
 Using inception v3 model (a CNN model) from keras. Using existed weights trained
