@@ -24,3 +24,15 @@ This project predicts the ratings of each movie rated by users. I use matrix
 factorization (SVD).  This is about recommender system. Dataset is from
 MovieLens.
 
+image_classification_kaggle_cdiscount:
+
+Adapted from https://www.kaggle.com/ezietsman/inception-v3-finetune
+
+This is for a kaggle competition : https://www.kaggle.com/c/cdiscount-image-
+classification-challenge
+
+
+Using inception v3 model (a CNN model) from keras. Using existed weights trained
+on imageNet dataset. Only train the last several fully-connected layers on
+cdiscount dataset.
+
